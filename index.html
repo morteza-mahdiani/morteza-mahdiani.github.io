@@ -7,8 +7,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="images/favicon/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="stylesheet.css">
+    <style>
+        a.bold-link {
+            font-weight: bold;
+            color: #1772d0;
+        }
+        a.bold-link:hover {
+            color: #f09228;
+        }
+        a.bio-link {
+            font-weight: bold;
+            color: #1772d0;
+        }
+        a.bio-link:hover {
+            color: #f09228;
+        }
+        .name {
+            font-size: 48px;
+            font-weight: bold;
+            color: #000; /* Changed to black */
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .works-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .work-item {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+        .work-item:hover {
+            transform: scale(1.02);
+        }
+        .work-item img {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            margin-right: 15px;
+        }
+        .work-item .papertitle {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1772d0;
+            margin-bottom: 5px;
+        }
+        .work-item .papertitle:hover {
+            color: #f09228;
+        }
+        .work-item em {
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
 </head>
-<body>
+<body style="background-color: #f7f7f7; color: #222;">
     <table style="width:100%;max-width:800px;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
         <tbody>
             <tr style="padding:0px">
@@ -21,22 +82,22 @@
                                         Morteza Mahdiani
                                     </p>
                                     <p>
-                                        I am a Master's student in Computer Science at the <a href='https://diro.umontreal.ca/english/home/'>University of Montreal</a>, currently working in the <a href='https://iancharest.com'>Charest Lab</a>. My research focuses on NeuroAI, computer vision, and generative AI, with a specific interest in comparing AI models with brain data. Previously, I served as a research assistant at <a href='https://mila.quebec/en'>Mila</a> and the <a href='https://www.umontreal.ca/en/'>University of Montreal</a>, working on related interdisciplinary projects in these fields.
+                                        I am a Master's student in Computer Science at the <a href='https://diro.umontreal.ca/english/home/' class='bio-link'>University of Montreal</a> and a researcher at <a href='https://mila.quebec/en' class='bio-link'>Mila - Quebec AI Institute</a>, currently working in the <a href='https://iancharest.com' class='bio-link'>Charest Lab</a>. My research focuses on multimodal learning, vision-language models, and brain encoding and decoding, with a specific interest in comparing AI models with brain data. Previously, I served as a research assistant at <a href='https://mila.quebec/en' class='bio-link'>Mila</a> and the <a href='https://diro.umontreal.ca/english/home/' class='bio-link'>University of Montreal</a>, where one of my projects contributed to the development of the platform <a href='https://cogcompneuro.com/' class='bio-link'>cogcompneuro.com</a>.
                                     </p>
                                     <p>
                                         <strong>Contact:</strong><br>
-                                        Email: <a href="mailto:morteza.mahdiani@umontreal.ca">morteza.mahdiani@umontreal.ca</a><br>
-                                        Homepage: <a href="https://morteza-mahdiani.github.io/">morteza-mahdiani.github.io</a>
+                                        Email: <a href="mailto:morteza.mahdiani@umontreal.ca" class="bio-link">morteza.mahdiani@umontreal.ca</a><br>
+                                        Homepage: <a href="https://morteza-mahdiani.github.io/" class="bio-link">morteza-mahdiani.github.io</a>
                                     </p>
                                     <p style="text-align:center">
-                                        <a href="https://www.linkedin.com/in/morteza-mahdiani/">LinkedIn</a> &nbsp;/&nbsp;
-                                        <a href="https://scholar.google.com/citations?user=xFztGO8AAAAJ&hl=en">Scholar</a> &nbsp;/&nbsp;
-                                        <a href="https://github.com/morteza-mahdiani">GitHub</a>  &nbsp;/&nbsp;
-                                        <a href="https://x.com/janiosadah?lang=en">X</a>
+                                        <a href="https://www.linkedin.com/in/morteza-mahdiani/" class="bio-link">LinkedIn</a> &nbsp;/&nbsp;
+                                        <a href="https://scholar.google.com/citations?user=xFztGO8AAAAJ&hl=en" class="bio-link">Scholar</a> &nbsp;/&nbsp;
+                                        <a href="https://github.com/morteza-mahdiani" class="bio-link">GitHub</a>  &nbsp;/&nbsp;
+                                        <a href="https://x.com/janiosadah?lang=en" class="bio-link">X</a>
                                     </p>
                                 </td>
                                 <td style="padding:2.5%;width:40%;max-width:40%">
-                                    <a href="images/profile.jpg"><img style="width:100%;max-width:100%;object-fit: cover; border-radius: 50%;" alt="profile photo" src="images/IMG_1743.png" class="hoverZoomLink"></a>
+                                    <a href="images/profile.jpg"><img style="width:100%;max-width:100%;object-fit: cover; border-radius: 50%;" alt="profile photo" src="images/photo.png" class="hoverZoomLink"></a>
                                 </td>
                             </tr>
                         </tbody>
@@ -45,52 +106,53 @@
                         <tbody>
                             <tr>
                                 <td style="padding:20px;width:100%;vertical-align:middle">
-                                    <h2>Recent Publications </h2>
+                                    <h2 style="text-align: left; font-size: 28px;">Selected Research Contributions</h2>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
-                      <tbody>
-                            
-                            <tr>
-                                <td style="padding:20px;width:25%;vertical-align:middle">
-                                    <img src="https://github.com/morteza-mahdiani/OK_CLIP/blob/gh-pages/resources/arch.jpg?raw=true" alt="paper1" width="160" height="160">
-                                </td>
-                                <td width="75%" valign="middle">
-                                    <a href="https://www.cell.com/iscience/fulltext/S2589-0042(24)01522-0">
-                                        <span class="papertitle">Fine-grained knowledge about manipulable objects is well-predicted by CLIP</span>
-                                    </a>
-                                    <br>
-                                    Jon Walbrin, Nikita Sossounov, <strong>Morteza Mahdiani</strong>, Igor Vaz, Jorge Almeida
-                                    <br>
-                                    <em>iScience</em>, 2024
-                                    <p>
-                                        This study reveals that CLIP-ViT effectively predicts behavioral dimensions of objects, outperforming models trained only on image-based datasets.
-                                    </p>
-                                </td>
-                            </tr>
-                            
-                            <tr>
-                                <td style="padding:20px;width:25%;vertical-align:middle">
-                                    <img src="images/ml_paper_2.png" alt="paper2" width="160" height="160">
-                                </td>
-                                <td width="75%" valign="middle">
-                                    <a href="https://www.biorxiv.org/content/10.1101/2022.05.12.491595v1.abstract">
-                                        <span class="papertitle">A Multimodal Neuroimaging Dataset to Study Spatiotemporal Dynamics of Visual Processing in Humans</span>
-                                    </a>
-                                    <br>
-                                    Fatemeh Ebrahiminia, <strong>Morteza Mahdiani</strong>, Seyed-Mahdi Khaligh-Razavi
-                                    <br>
-                                    <em>bioRxiv</em>, 2022
-                                    <p>
-                                        This dataset from 21 healthy volunteers combines fMRI and EEG data to study object recognition, offering new insights into human brain function.
-                                    </p>
-                                </td>
-                            </tr>
-                            
-                        </tbody>
-                    </table>
+                    <div class="works-grid">
+                        <div class="work-item">
+                            <img src="images/incontextFails.png" alt="paper1">
+                            <div>
+                                <a href="https://github.com/morteza-mahdiani/MultiModal-ICL-Benchmark" class="papertitle">Few-Shot Learning Fails: Limits of In-Context Reasoning in VLMs</a><br>
+                                <em>TBD</em><br>
+                                VLMs reasoning with minimal visual changes.
+                            </div>
+                        </div>
+                        <div class="work-item">
+                            <img src="images/visgate.png" alt="paper2">
+                            <div>
+                                <a href="#" class="papertitle">VISGate: Dual-Head Encoders for Brain Alignment</a><br>
+                                <em>Neurips 2025 Workshop</em><br>
+                                Image-to-brain encoding with LLM embeddings.
+                            </div>
+                        </div>
+                        <div class="work-item">
+                            <img src="images/incontextGNETQG.png" alt="paper3">
+                            <div>
+                                <a href="https://openreview.net/pdf?id=q8FVv3LLgW" class="papertitle">Graph-Guided Prompting for Multi-Hop QG</a><br>
+                                <em>ICML 2025 Workshop</em><br>
+                                Zero-shot multi-hop QG with LLMs.
+                            </div>
+                        </div>
+                        <div class="work-item">
+                            <img src="images/toolCLIP.png" alt="paper4">
+                            <div>
+                                <a href="https://www.cell.com/iscience/fulltext/S2589-0042(24)01522-0" class="papertitle">CLIP Predicts Object Knowledge</a><br>
+                                <em>iScience 2024</em><br>
+                                CLIP-ViT predicts object dimensions.
+                            </div>
+                        </div>
+                        <div class="work-item">
+                            <img src="images/multimodalData.png" alt="paper5">
+                            <div>
+                                <a href="https://www.biorxiv.org/content/10.1101/2022.05.12.491595v1.abstract" class="papertitle">Multimodal Neuroimaging Dataset</a><br>
+                                <em>bioRxiv 2022</em><br>
+                                fMRI & EEG for object recognition.
+                            </div>
+                        </div>
+                    </div>
                 </td>
             </tr>
         </tbody>
