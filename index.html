@@ -67,6 +67,43 @@
             font-size: 14px;
             color: #555;
         }
+        @media (max-width: 768px) {
+            .name {
+                font-size: 36px;
+            }
+            .works-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .work-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .work-item img {
+                width: 80px;
+                height: 80px;
+                margin-bottom: 10px;
+            }
+            .work-item .papertitle {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .name {
+                font-size: 28px;
+            }
+            .work-item {
+                padding: 10px;
+            }
+            .work-item img {
+                width: 60px;
+                height: 60px;
+            }
+            .work-item .papertitle {
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 <body style="background-color: #f7f7f7; color: #222;">
