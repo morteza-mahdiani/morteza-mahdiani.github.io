@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Visual cortex · Morteza Mahdiani</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #07080a;
+      --ink: #e8e4dc;
+      --muted: #8a857c;
+      --accent: #d4a574;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "IBM Plex Sans", system-ui, sans-serif;
+      overflow: hidden;
+    }
+    #c {
+      position: fixed; inset: 0;
+      width: 100%; height: 100%;
+      display: block;
+      cursor: grab;
+    }
+    #c:active { cursor: grabbing; }
+    .vignette {
+      pointer-events: none;
+      position: fixed; inset: 0; z-index: 2;
+      background:
+        radial-gradient(ellipse 70% 55% at 50% 45%, transparent 35%, rgba(7,8,10,.55) 100%),
+        linear-gradient(180deg, rgba(7,8,10,.35) 0%, transparent 18%, transparent 78%, rgba(7,8,10,.7) 100%);
+    }
+    .grain {
+      pointer-events: none;
+      position: fixed; inset: 0; z-index: 3; opacity: .045;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .hud {
+      position: fixed; z-index: 4;
+      left: clamp(1.25rem, 3vw, 2.5rem);
+      bottom: clamp(1.25rem, 3vw, 2.5rem);
+      max-width: min(28rem, 86vw);
+      pointer-events: none;
+    }
+    .hud h1 {
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(1.35rem, 2.6vw, 1.85rem);
+      letter-spacing: -.02em;
+      line-height: 1.15;
+      margin-bottom: .55rem;
+    }
+    .hud p {
+      font-weight: 300;
+      font-size: .92rem;
+      line-height: 1.45;
+      color: var(--muted);
+      max-width: 24rem;
+    }
+    .meta {
+      margin-top: 1.1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .55rem 1rem;
+      align-items: baseline;
+      font-size: .72rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .meta .cat {
+      color: var(--accent);
+      font-weight: 500;
+      letter-spacing: .12em;
+    }
+    .meta .dot {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--muted); opacity: .55;
+      display: inline-block;
+    }
+    .top-right {
+      position: fixed; z-index: 4;
+      right: clamp(1.25rem, 3vw, 2.5rem);
+      top: clamp(1.25rem, 3vw, 2.5rem);
+      text-align: right;
+      pointer-events: none;
+      font-size: .7rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .legend {
+      position: fixed; z-index: 4;
+      right: clamp(1.25rem, 3vw, 2.5rem);
+      bottom: clamp(1.25rem, 3vw, 2.5rem);
+      display: flex; flex-direction: column; gap: .4rem;
+      pointer-events: none;
+      font-size: .68rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .legend span {
+      display: flex; align-items: center; gap: .55rem; justify-content: flex-end;
+    }
+    .swatch {
+      width: 10px; height: 10px; border-radius: 50%;
+      box-shadow: 0 0 10px currentColor;
+    }
+    .loading {
+      position: fixed; inset: 0; z-index: 10;
+      display: grid; place-items: center;
+      background: var(--bg);
+      transition: opacity .7s ease, visibility .7s;
+    }
+    .loading.hide { opacity: 0; visibility: hidden; }
+    .loading .mark {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.1rem;
+      color: var(--muted);
+      letter-spacing: .04em;
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: .35; }
+      50% { opacity: .9; }
+    }
+    @media (max-width: 640px) {
+      .legend, .top-right { display: none; }
+    }
+    .hud, .top-right, .legend { display: none; }
+  </style>
+</head>
+<body>
+  <div class="loading" id="loading"><div class="mark">loading cortex</div></div>
+  <canvas id="c"></canvas>
+  <div class="vignette"></div>
+  <div class="grain"></div>
+
+  <div class="top-right">
+    NSD · fsaverage<br />
+    Kastner2015 · 50 ROIs
+  </div>
+
+  <div class="hud">
+    <h1>Visual cortex, as tokens</h1>
+    <p>
+      Full anatomical cortex from NSD (white surface), with Kastner ROIs lit by
+      learned routing — activation travels the visual hierarchy on a real brain.
+    </p>
+    <div class="meta">
+      <span class="cat" id="catLabel">outdoor</span>
+      <span class="dot"></span>
+      <span id="phaseLabel">hierarchy pulse</span>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><i class="swatch" style="color:#9aa8a9;background:#9aa8a9"></i> early</span>
+    <span><i class="swatch" style="color:#c4b49a;background:#c4b49a"></i> LO</span>
+    <span><i class="swatch" style="color:#d4a574;background:#d4a574"></i> TO</span>
+    <span><i class="swatch" style="color:#e8c9a8;background:#e8c9a8"></i> high-level</span>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const canvas = document.getElementById("c");
+const loading = document.getElementById("loading");
+const catLabel = document.getElementById("catLabel");
+const phaseLabel = document.getElementById("phaseLabel");
+
+const GROUP_COLORS = [
+  new THREE.Color("#7a9e9f"),
+  new THREE.Color("#c4b49a"),
+  new THREE.Color("#d4a574"),
+  new THREE.Color("#e8c9a8"),
+  new THREE.Color("#6b6860"),
+];
+
+const data = await fetch("./brain_data.json").then((r) => {
+  if (!r.ok) throw new Error("Failed to load brain_data.json");
+  return r.json();
+});
+
+const n = data.meta.n_points;
+const scale = data.meta.coord_scale;
+const xyzQ = data.points.xyz_q;
+const roiIds = data.points.roi;
+const groups = data.points.group;
+const route01 = data.rois_route01;
+const sel01 = data.rois_sel01;
+const cats = data.categories;
+const routeByCat = data.routing_by_category;
+const transplant = data.group_transplant_r10;
+
+const positions = new Float32Array(n * 3);
+const colors = new Float32Array(n * 3);
+const sizes = new Float32Array(n);
+const baseAct = new Float32Array(n);
+const groupId = new Float32Array(n);
+const roiRoute = new Float32Array(n);
+const roiAttr = new Float32Array(n);
+
+for (let i = 0; i < n; i++) {
+  positions[i * 3]     = xyzQ[i * 3] / scale;
+  positions[i * 3 + 1] = xyzQ[i * 3 + 1] / scale;
+  positions[i * 3 + 2] = xyzQ[i * 3 + 2] / scale;
+  const rid = roiIds[i];
+  const g = groups[i];
+  groupId[i] = g;
+  roiRoute[i] = route01[rid];
+  roiAttr[i] = rid;
+  baseAct[i] = 0.25 + 0.75 * route01[rid];
+  const c = GROUP_COLORS[g] || GROUP_COLORS[4];
+  colors[i * 3] = c.r;
+  colors[i * 3 + 1] = c.g;
+  colors[i * 3 + 2] = c.b;
+  sizes[i] = 1.0 + 1.8 * sel01[rid];
+}
+
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  antialias: true,
+  alpha: false,
+  powerPreference: "high-performance",
+});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x07080a, 1);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x07080a, 0.14);
+
+const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 40);
+camera.position.set(0.0, 0.15, 3.6);
+
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+controls.dampingFactor = 0.045;
+controls.enablePan = false;
+controls.minDistance = 1.8;
+controls.maxDistance = 5.5;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.35;
+controls.target.set(0, 0.0, 0);
+
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (prefersReducedMotion) controls.autoRotate = false;
+
+const uniforms = {
+  uTime: { value: 0 },
+  uPulse: { value: 0 },
+  uCatMix: { value: 0 },
+  uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+  uCatRoute: { value: new Float32Array(50) },
+  uPrevRoute: { value: new Float32Array(50) },
+};
+
+let shellMat = null;
+if (data.shell?.xyz_q) {
+  const sQ = data.shell.xyz_q;
+  const nShell = sQ.length / 3;
+  const shellPos = new Float32Array(nShell * 3);
+  for (let i = 0; i < nShell; i++) {
+    shellPos[i * 3]     = sQ[i * 3] / scale;
+    shellPos[i * 3 + 1] = sQ[i * 3 + 1] / scale;
+    shellPos[i * 3 + 2] = sQ[i * 3 + 2] / scale;
+  }
+  const shellGeom = new THREE.BufferGeometry();
+  shellGeom.setAttribute("position", new THREE.BufferAttribute(shellPos, 3));
+  shellMat = new THREE.ShaderMaterial({
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.NormalBlending,
+    uniforms: {
+      uTime: uniforms.uTime,
+      uPixelRatio: uniforms.uPixelRatio,
+    },
+    vertexShader: /* glsl */ `
+      uniform float uTime;
+      uniform float uPixelRatio;
+      varying float vAlpha;
+      void main() {
+        vec3 p = position;
+        float breath = 1.0 + 0.006 * sin(uTime * 0.45 + position.y * 3.0);
+        p *= breath;
+        vec4 mv = modelViewMatrix * vec4(p, 1.0);
+        gl_Position = projectionMatrix * mv;
+        float distBoost = clamp(2.2 / max(-mv.z, 0.2), 0.45, 2.0);
+        gl_PointSize = min(uPixelRatio * 1.85 * distBoost, 6.0 * uPixelRatio);
+        vAlpha = 0.16;
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      varying float vAlpha;
+      void main() {
+        vec2 uv = gl_PointCoord - 0.5;
+        float d = length(uv);
+        if (d > 0.48) discard;
+        float a = smoothstep(0.48, 0.0, d) * vAlpha;
+        if (a < 0.02) discard;
+        gl_FragColor = vec4(0.45, 0.44, 0.40, a);
+      }
+    `,
+  });
+  scene.add(new THREE.Points(shellGeom, shellMat));
+}
+
+const geom = new THREE.BufferGeometry();
+geom.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+geom.setAttribute("aColor", new THREE.BufferAttribute(colors, 3));
+geom.setAttribute("aSize", new THREE.BufferAttribute(sizes, 1));
+geom.setAttribute("aBase", new THREE.BufferAttribute(baseAct, 1));
+geom.setAttribute("aGroup", new THREE.BufferAttribute(groupId, 1));
+geom.setAttribute("aRoute", new THREE.BufferAttribute(roiRoute, 1));
+geom.setAttribute("aRoi", new THREE.BufferAttribute(roiAttr, 1));
+
+const material = new THREE.ShaderMaterial({
+  transparent: true,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending,
+  uniforms,
+  vertexShader: /* glsl */ `
+    attribute vec3 aColor;
+    attribute float aSize;
+    attribute float aBase;
+    attribute float aGroup;
+    attribute float aRoute;
+    attribute float aRoi;
+    uniform float uTime;
+    uniform float uPulse;
+    uniform float uCatMix;
+    uniform float uPixelRatio;
+    uniform float uCatRoute[50];
+    uniform float uPrevRoute[50];
+    varying vec3 vColor;
+    varying float vAlpha;
+
+    float hash(float n) { return fract(sin(n) * 43758.5453); }
+
+    void main() {
+      int ri = int(aRoi + 0.5);
+      float catR = mix(uPrevRoute[ri], uCatRoute[ri], uCatMix);
+
+      float g = aGroup;
+      float wave = fract(uTime * 0.07);
+      float center = (g + 0.5) / 4.0;
+      float hier = exp(-pow((wave - center) * 5.5, 2.0));
+      hier = max(hier, 0.08);
+
+      float breath = 0.88 + 0.12 * sin(uTime * 0.65 + aRoute * 6.28);
+      float act = mix(aBase * breath, catR, 0.72);
+      act = mix(act, act * (0.45 + 1.35 * hier), uPulse * 0.85);
+      act = clamp(act, 0.0, 1.35);
+
+      vec3 p = position;
+      float jitter = (hash(aRoi * 17.3 + floor(uTime * 0.4)) - 0.5) * 0.0035;
+      p += normalize(p + vec3(1e-4)) * (0.018 * act + jitter);
+
+      vec4 mv = modelViewMatrix * vec4(p, 1.0);
+      gl_Position = projectionMatrix * mv;
+      float distBoost = clamp(2.35 / max(-mv.z, 0.2), 0.5, 2.0);
+      gl_PointSize = min(aSize * uPixelRatio * (2.0 + 4.2 * act) * distBoost, 14.0 * uPixelRatio);
+
+      vec3 warm = vec3(1.0, 0.88, 0.74);
+      float lift = clamp(act * 0.5 + uPulse * hier * 0.4, 0.0, 0.9);
+      vColor = mix(aColor * 0.75, warm, lift);
+      vColor = mix(vColor, aColor, 0.25);
+      vAlpha = clamp(0.06 + act * 0.62, 0.03, 0.98);
+    }
+  `,
+  fragmentShader: /* glsl */ `
+    varying vec3 vColor;
+    varying float vAlpha;
+    void main() {
+      vec2 uv = gl_PointCoord - 0.5;
+      float d = length(uv);
+      // Hard circular mask — avoids visible square point sprites
+      if (d > 0.48) discard;
+      float core = smoothstep(0.48, 0.0, d);
+      float a = core * core * vAlpha;
+      if (a < 0.02) discard;
+      gl_FragColor = vec4(vColor, a);
+    }
+  `,
+});
+
+scene.add(new THREE.Points(geom, material));
+
+let catIndex = 0;
+let prevCat = 0;
+let catT = 0;
+const CAT_HOLD = 5.5;
+const CAT_BLEND = 1.35;
+
+function setRouteUniform(arr, catI) {
+  const src = routeByCat[catI];
+  for (let i = 0; i < 50; i++) arr[i] = src[i];
+}
+setRouteUniform(uniforms.uCatRoute.value, 0);
+setRouteUniform(uniforms.uPrevRoute.value, 0);
+catLabel.textContent = cats[0];
+
+function onResize() {
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+  uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
+}
+window.addEventListener("resize", onResize);
+
+let last = performance.now();
+loading.classList.add("hide");
+
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000);
+  last = now;
+  const t = uniforms.uTime.value + dt;
+  uniforms.uTime.value = t;
+
+  const pulse = 0.5 + 0.5 * Math.sin(t * 0.35);
+  uniforms.uPulse.value = 0.35 + 0.65 * pulse;
+
+  catT += dt;
+  if (catT > CAT_HOLD) {
+    catT = 0;
+    prevCat = catIndex;
+    catIndex = (catIndex + 1) % cats.length;
+    setRouteUniform(uniforms.uPrevRoute.value, prevCat);
+    setRouteUniform(uniforms.uCatRoute.value, catIndex);
+    catLabel.textContent = cats[catIndex];
+  }
+  const mix = Math.min(1, catT / CAT_BLEND);
+  uniforms.uCatMix.value = mix * mix * (3 - 2 * mix);
+
+  const rKeys = ["early", "lo", "to", "high_level"];
+  const rKey = rKeys[Math.floor((t * 0.07 % 1) * 4) % 4];
+  const phase = pulse > 0.55 ? "hierarchy pulse" : "category routing";
+  phaseLabel.textContent = `${phase} · ${rKey} R@10 ${(transplant[rKey] * 100).toFixed(0)}%`;
+
+  controls.update();
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+controls.addEventListener("start", () => { controls.autoRotate = false; });
+controls.addEventListener("end", () => {
+  if (!prefersReducedMotion) setTimeout(() => { controls.autoRotate = true; }, 1800);
+});
+  </script>
+</body>
+</html>
