@@ -43,46 +43,34 @@
     }
     .hud {
       position: fixed; z-index: 4;
-      left: clamp(1.25rem, 3vw, 2.5rem);
+      right: clamp(1.25rem, 3vw, 2.5rem);
       bottom: clamp(1.25rem, 3vw, 2.5rem);
-      max-width: min(28rem, 86vw);
+      max-width: min(24rem, 86vw);
+      text-align: right;
       pointer-events: none;
     }
-    .hud h1 {
-      font-family: "Fraunces", Georgia, serif;
-      font-weight: 400;
-      font-size: clamp(1.35rem, 2.6vw, 1.85rem);
-      letter-spacing: -.02em;
-      line-height: 1.15;
-      margin-bottom: .55rem;
-    }
-    .hud p {
-      font-weight: 300;
-      font-size: .92rem;
-      line-height: 1.45;
-      color: var(--muted);
-      max-width: 24rem;
-    }
     .meta {
-      margin-top: 1.1rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: .55rem 1rem;
-      align-items: baseline;
-      font-size: .72rem;
-      letter-spacing: .08em;
+      display: grid;
+      gap: .65rem;
+      font-size: .68rem;
+      letter-spacing: .07em;
       text-transform: uppercase;
       color: var(--muted);
     }
+    .readout-row {
+      display: grid;
+      gap: .08rem;
+    }
+    .readout-key {
+      font-size: .58rem;
+      letter-spacing: .12em;
+      opacity: .7;
+    }
+    .readout-value,
     .meta .cat {
       color: var(--accent);
       font-weight: 500;
-      letter-spacing: .12em;
-    }
-    .meta .dot {
-      width: 4px; height: 4px; border-radius: 50%;
-      background: var(--muted); opacity: .55;
-      display: inline-block;
+      letter-spacing: .1em;
     }
     .top-right {
       position: fixed; z-index: 4;
@@ -134,8 +122,13 @@
     }
     @media (max-width: 640px) {
       .legend, .top-right { display: none; }
+      .hud {
+        top: 4.8rem;
+        right: 1.25rem;
+        bottom: auto;
+      }
     }
-    .hud, .top-right, .legend { display: none; }
+    .top-right, .legend { display: none; }
   </style>
 </head>
 <body>
@@ -150,15 +143,15 @@
   </div>
 
   <div class="hud">
-    <h1>Visual cortex, as tokens</h1>
-    <p>
-      Full anatomical cortex from NSD (white surface), with Kastner ROIs lit by
-      learned routing — activation travels the visual hierarchy on a real brain.
-    </p>
-    <div class="meta">
-      <span class="cat" id="catLabel">outdoor</span>
-      <span class="dot"></span>
-      <span id="phaseLabel">hierarchy pulse</span>
+    <div class="meta" role="group" aria-label="Live brain activation context">
+      <span class="readout-row">
+        <span class="readout-key">Image category</span>
+        <span class="cat" id="catLabel">outdoor</span>
+      </span>
+      <span class="readout-row">
+        <span class="readout-key">Activation region</span>
+        <span class="readout-value" id="phaseLabel">early visual cortex · V1–V4</span>
+      </span>
     </div>
   </div>
 
@@ -208,7 +201,6 @@ const route01 = data.rois_route01;
 const sel01 = data.rois_sel01;
 const cats = data.categories;
 const routeByCat = data.routing_by_category;
-const transplant = data.group_transplant_r10;
 
 const positions = new Float32Array(n * 3);
 const colors = new Float32Array(n * 3);
@@ -455,8 +447,13 @@ function frame(now) {
 
   const rKeys = ["early", "lo", "to", "high_level"];
   const rKey = rKeys[Math.floor((t * 0.07 % 1) * 4) % 4];
-  const phase = pulse > 0.55 ? "hierarchy pulse" : "category routing";
-  phaseLabel.textContent = `${phase} · ${rKey} R@10 ${(transplant[rKey] * 100).toFixed(0)}%`;
+  const regionNames = {
+    early: "early visual cortex · V1–V4",
+    lo: "lateral occipital cortex · LO",
+    to: "temporal–occipital cortex · TO",
+    high_level: "higher visual cortex",
+  };
+  phaseLabel.textContent = regionNames[rKey];
 
   controls.update();
   renderer.render(scene, camera);
