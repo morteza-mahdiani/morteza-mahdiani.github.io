@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Morteza Mahdiani is a machine learning researcher working across vision, language, and audio.">
   <meta name="author" content="Morteza Mahdiani">
-  <meta name="theme-color" content="#f8f5ed">
+  <meta name="theme-color" content="#f8f3eb">
   <title>Morteza Mahdiani — Machine Learning Researcher</title>
   <link rel="icon" href="images/favicon/favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="images/favicon/apple-touch-icon.png">
@@ -21,7 +21,7 @@
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
         <h1 id="hero-title">Morteza Mahdiani</h1>
-        <p class="role">Machine Learning Researcher<br class="role-break"> building multimodal systems.</p>
+        <p class="role">Machine Learning Researcher<br class="role-break"> building <span>multimodal systems.</span></p>
         <p class="intro">I work on machine learning across vision, language, and audio, with an interest in how intelligent systems perceive, represent, and understand the world.</p>
       </div>
 
@@ -29,38 +29,69 @@
         <svg class="orbits" viewBox="0 0 460 460" width="460" height="460" aria-hidden="true" focusable="false">
           <defs>
             <radialGradient id="illumination">
-              <stop stop-color="#52ae9e" stop-opacity=".34"/>
+              <stop stop-color="#168b88" stop-opacity=".65"/>
+              <stop offset=".38" stop-color="#3fa9a2" stop-opacity=".24"/>
               <stop offset="1" stop-color="#52ae9e" stop-opacity="0"/>
             </radialGradient>
             <path id="ellipse" d="M 411 230 a 181 66 0 1 0 -362 0 a 181 66 0 1 0 362 0 Z"/>
             <path id="rim" d="M 423 230 a 193 193 0 1 0 -386 0 a 193 193 0 1 0 386 0 Z"/>
+            <path id="wave" d="M 1 286 C 91 248 119 333 221 319 S 361 264 459 173"/>
+            <path id="petal" d="M 230 216 Q 244 230 230 244 Q 216 230 230 216 Z"/>
           </defs>
 
           <g class="guides" fill="none">
-            <use href="#rim"/>
-            <circle cx="230" cy="230" r="207" stroke-dasharray="1 5"/>
-            <circle cx="230" cy="230" r="132" stroke-dasharray="1 5"/>
-            <path d="M 230 12 V 448 M 12 230 H 448"/>
-            <path class="cardinal" d="M 230 20 V 42 M 230 418 V 440 M 20 230 H 42 M 418 230 H 440"/>
+            <use href="#rim" stroke-dasharray="1 4"/>
+            <circle cx="230" cy="230" r="171" stroke-dasharray=".5 4"/>
+            <path d="M 230 37 V 393 M 80 230 H 373"/>
           </g>
 
-          <circle cx="230" cy="230" r="75" fill="url(#illumination)"/>
+          <g class="wave" fill="none">
+            <use href="#wave"/>
+            <use href="#wave" transform="translate(0 4)"/>
+            <use href="#wave" transform="translate(0 8)"/>
+            <use href="#wave" transform="translate(0 12)"/>
+            <use href="#wave" transform="translate(0 16)"/>
+            <use href="#wave" transform="translate(0 20)"/>
+            <use href="#wave" transform="translate(0 24)"/>
+          </g>
+
           <g class="curves" fill="none">
             <use href="#ellipse" transform="rotate(15 230 230)"/>
-            <use href="#ellipse" transform="rotate(45 230 230)"/>
-            <use href="#ellipse" transform="rotate(75 230 230)"/>
-            <use href="#ellipse" transform="rotate(105 230 230)"/>
+            <use href="#ellipse" transform="rotate(75 230 230) scale(.72 1) translate(89 0)"/>
             <use href="#ellipse" transform="rotate(135 230 230)"/>
             <use href="#ellipse" transform="rotate(165 230 230)"/>
-            <circle cx="230" cy="230" r="66"/>
-            <circle cx="230" cy="230" r="23" stroke-dasharray="1 4"/>
+            <ellipse cx="230" cy="230" rx="34" ry="161"/>
+            <ellipse cx="230" cy="230" rx="91" ry="161"/>
+            <circle cx="230" cy="230" r="66" stroke-dasharray="1 3"/>
           </g>
 
+          <g class="star" fill="none">
+            <path d="M 230 23 V 51 M 216 37 H 244 M 222 29 L 238 45 M 222 45 L 238 29"/>
+            <path d="M 364 61 L 385 48 L 407 66 L 399 88 L 421 101" stroke-dasharray="1 3"/>
+            <g fill="currentColor" stroke="none">
+              <circle cx="230" cy="37" r="2.2"/>
+              <circle cx="364" cy="61" r="1.6"/>
+              <circle cx="385" cy="48" r="1.6"/>
+              <circle cx="407" cy="66" r="1.4"/>
+              <circle cx="399" cy="88" r="1.6"/>
+              <circle cx="421" cy="101" r="1.4"/>
+              <circle cx="89" cy="104" r="5.5" opacity=".55"/>
+            </g>
+          </g>
+
+          <circle cx="230" cy="230" r="51" fill="url(#illumination)"/>
+          <g class="rosette" fill="none">
+            <use href="#petal"/>
+            <use href="#petal" transform="rotate(45 230 230)"/>
+            <use href="#petal" transform="rotate(90 230 230)"/>
+            <use href="#petal" transform="rotate(135 230 230)"/>
+            <circle cx="230" cy="230" r="13.5"/>
+          </g>
           <g class="particles">
             <circle cx="230" cy="230" r="3.4"/>
             <g class="resting-particles">
               <circle cx="405" cy="277" r="2.7"/>
-              <circle cx="183" cy="55" r="3"/>
+              <circle cx="196" cy="104" r="3"/>
               <circle cx="358" cy="102" r="2.4"/>
               <circle cx="55" cy="277" r="2.6"/>
               <circle cx="70" cy="122" r="2.1"/>
@@ -72,7 +103,7 @@
                 <animateMotion begin="indefinite" dur="54s" repeatCount="indefinite"><mpath href="#ellipse"/></animateMotion>
               </circle>
             </g>
-            <g transform="rotate(75 230 230)">
+            <g transform="rotate(75 230 230) scale(.72 1) translate(89 0)">
               <circle r="3">
                 <animateMotion begin="indefinite" dur="66s" repeatCount="indefinite"><mpath href="#ellipse"/></animateMotion>
               </circle>
@@ -93,7 +124,6 @@
               </circle>
             </g>
             <circle cx="37" cy="230" r="2"/>
-            <circle cx="230" cy="37" r="2"/>
           </g>
         </svg>
         <button class="motion-toggle" type="button" hidden>Pause animation</button>

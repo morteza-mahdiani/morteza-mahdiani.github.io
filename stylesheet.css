@@ -1,7 +1,7 @@
 :root {
   color-scheme: light;
-  --background: #f8f5ed;
-  --ink: #242d29;
+  --background: #f8f3eb;
+  --ink: #292923;
   --muted: #505d55;
   --accent: #176c60;
   --gold: #765b2d;
@@ -59,6 +59,14 @@ a:hover { text-decoration-color: currentColor; }
   padding-block: clamp(3.25rem, 6vw, 6rem);
 }
 
+.hero-copy::before {
+  content: "";
+  display: block;
+  width: 3rem;
+  margin-bottom: 1.5rem;
+  border-top: 1px solid #a78752;
+}
+
 h1 {
   font-family: var(--serif);
   font-weight: 400;
@@ -73,6 +81,8 @@ h1 {
   font-size: clamp(1.75rem, 3.2vw, 2.8rem);
   line-height: 1.05;
 }
+
+.role span { color: var(--accent); }
 
 .intro {
   max-width: 28rem;
@@ -89,9 +99,11 @@ h1 {
 }
 
 .orbits { display: block; width: 100%; height: auto; }
-.guides { stroke: #819d91; stroke-width: .7; opacity: .62; }
-.guides .cardinal { stroke: var(--gold); stroke-width: 1; }
-.curves { stroke: #347f72; stroke-width: .86; opacity: .77; }
+.guides { stroke: #a58c63; stroke-width: .65; opacity: .7; }
+.curves { stroke: #a1834d; stroke-width: .72; opacity: .69; }
+.wave { stroke: #438b84; stroke-width: .55; opacity: .31; }
+.star { color: #936d35; stroke: currentColor; stroke-width: .75; }
+.rosette { stroke: #147772; stroke-width: .8; }
 .particles { fill: #237a6e; }
 .moving-particles, .is-animated .resting-particles { visibility: hidden; }
 .is-animated .moving-particles { visibility: visible; }
