@@ -90,6 +90,15 @@ h1 {
   color: var(--muted);
 }
 
+.scholar-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  min-height: 2.75rem;
+  margin-top: .8rem;
+  font-size: .85rem;
+}
+
 .geometry {
   position: relative;
   display: grid;

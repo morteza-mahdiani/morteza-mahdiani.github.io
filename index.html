@@ -23,6 +23,7 @@
         <h1 id="hero-title">Morteza Mahdiani</h1>
         <p class="role">Machine Learning Researcher<br class="role-break"> building <span>multimodal systems.</span></p>
         <p class="intro">I work on machine learning across vision, language, and audio, with an interest in how intelligent systems perceive, represent, and understand the world.</p>
+        <a class="scholar-link" href="https://scholar.google.com/citations?user=xFztGO8AAAAJ&amp;hl=en">Google Scholar <span aria-hidden="true">↗</span></a>
       </div>
 
       <div class="geometry" id="geometry">
@@ -46,6 +47,7 @@
           </g>
 
           <g class="wave" fill="none">
+            <animate attributeName="opacity" values=".55;1;.55" begin="indefinite" dur="14s" repeatCount="indefinite"/>
             <use href="#wave"/>
             <use href="#wave" transform="translate(0 4)"/>
             <use href="#wave" transform="translate(0 8)"/>
@@ -79,8 +81,11 @@
             </g>
           </g>
 
-          <circle cx="230" cy="230" r="51" fill="url(#illumination)"/>
+          <circle cx="230" cy="230" r="51" fill="url(#illumination)">
+            <animate attributeName="r" values="46;59;46" begin="indefinite" dur="12s" repeatCount="indefinite"/>
+          </circle>
           <g class="rosette" fill="none">
+            <animateTransform attributeName="transform" type="rotate" from="0 230 230" to="360 230 230" begin="indefinite" dur="120s" repeatCount="indefinite"/>
             <use href="#petal"/>
             <use href="#petal" transform="rotate(45 230 230)"/>
             <use href="#petal" transform="rotate(90 230 230)"/>

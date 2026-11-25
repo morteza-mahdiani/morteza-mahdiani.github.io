@@ -9,12 +9,13 @@ function updateMotion() {
 
   if (reducedMotion.matches) {
     orbits.pauseAnimations();
+    orbits.setCurrentTime(0);
     orbits.classList.remove("is-animated");
     return;
   }
 
   if (!started) {
-    for (const motion of orbits.querySelectorAll("animateMotion")) {
+    for (const motion of orbits.querySelectorAll("animateMotion, animateTransform, animate")) {
       motion.beginElement();
     }
     started = true;
